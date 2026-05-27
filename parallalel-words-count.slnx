@@ -1,0 +1,12 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <BuildType Name="Release_MPI" />
+    <BuildType Name="Release_OMP" />
+    <BuildType Name="Release_SEQ" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="parallalel-words-count.vcxproj" Id="91a12bf8-2669-453e-a652-290d1860a976" />
+</Solution>
