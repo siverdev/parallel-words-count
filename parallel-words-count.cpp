@@ -235,6 +235,7 @@ void collect_files(const fs::path& path, std::vector<fs::path>& files)
 inline bool is_word_char(char c)
 {
     return std::isalpha(static_cast<unsigned char>(c)) || c == '\'';
+
 }
 
 inline char normalize_char(char c)
@@ -278,6 +279,7 @@ bool is_valid_token(const std::string& token) {
     if (token.empty()) return false; 
 
     if (token.length() > 20) return false;
+    if (token.length() < 2) return false;
 
     // 4+ letters
     int same_char_count = 1;
@@ -328,12 +330,26 @@ void process_chunk(const ChunkTask& task, std::unordered_map<std::string, uint64
     // ========================================================
     std::string token;
     for (uint64_t i = start; i < bytes_read; ++i) {
+
+        // UTF-8 апострофи ’ та ‘
+        if (i + 2 < bytes_read &&
+            static_cast<unsigned char>(buffer[i]) == 0xE2 &&
+            static_cast<unsigned char>(buffer[i + 1]) == 0x80 &&
+            (static_cast<unsigned char>(buffer[i + 2]) == 0x98 ||
+                static_cast<unsigned char>(buffer[i + 2]) == 0x99))
+        {
+            token.push_back('\'');
+            i += 2;
+            continue;
+        }
+
         if (is_word_char(buffer[i])) {
             token.push_back(normalize_char(buffer[i]));
         }
         else {
             if (!token.empty()) {
                 trim_quotes(token);
+
                 if (is_valid_token(token)) {
                     ++local_map[token];
                 }
