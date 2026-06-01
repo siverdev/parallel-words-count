@@ -86,7 +86,7 @@
 namespace fs = std::filesystem;
 
 // ============================================================
-// Sop words
+// Stop words
 // ============================================================
 
 const std::unordered_set<std::string> stop_words = {
